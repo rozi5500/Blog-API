@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { PostsRepository } from './posts.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Post } from '../entities/post.entity';
+import { Post, User } from '../entities';
+import { UserRepository } from './user.repository';
 
-const providers = [PostsRepository];
-const entities = [Post];
+const providers = [PostsRepository, UserRepository];
+const entities = [Post, User];
 
 @Module({
   imports: [TypeOrmModule.forFeature(entities)],

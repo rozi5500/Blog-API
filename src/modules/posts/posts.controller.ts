@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { Post as PostEntity } from '../../entities/post.entity';
+import { PostCreateDto } from './dto/post-create.dto';
 
 @Controller('posts')
 export class PostsController {
@@ -11,9 +12,8 @@ export class PostsController {
     return this.postsService.getPosts();
   }
 
-  // TODO Type for postData
   @Post('create')
-  async createPost(@Body() post: object): Promise<PostEntity> {
+  async createPost(@Body() post: PostCreateDto): Promise<PostEntity> {
     return this.postsService.createPost(post);
   }
 }

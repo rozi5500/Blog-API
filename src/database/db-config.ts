@@ -1,5 +1,5 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Post } from '../entities/post.entity';
+import { Post, Comment, User } from '../entities';
 import * as dotenv from 'dotenv';
 import * as process from 'process';
 
@@ -13,7 +13,7 @@ export const dbConfig = () => {
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    entities: [Post],
+    entities: [Post, Comment, User],
     synchronize: true,
   });
 };

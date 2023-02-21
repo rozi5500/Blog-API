@@ -1,18 +1,18 @@
-import {
-  // Column,
-  Entity,
-  // JoinColumn,
-  // ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-// import { Post } from './post.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Post } from './post.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Comment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  // @ManyToOne(() => Post)
-  // @JoinColumn({ referencedColumnName: 'id' })
-  // text: string;
+  @Column()
+  text: string;
+
+  @ManyToOne(() => Post, (post) => post.comments)
+  post: Post;
+
+  @ManyToOne(() => User, (user) => user.comments)
+  user: User;
 }

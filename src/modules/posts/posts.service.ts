@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PostsRepository } from '../../repositories/posts.repository';
-import { Post } from '../../entities/post.entity';
+import { Post } from '../../entities';
+import { PostCreateDto } from './dto/post-create.dto';
 
 @Injectable()
 export class PostsService {
@@ -10,8 +11,7 @@ export class PostsService {
     return this.postsRepository.findAllPosts();
   }
 
-  // TODO Type for postData
-  async createPost(postData: object): Promise<Post> {
+  async createPost(postData: PostCreateDto): Promise<Post> {
     return this.postsRepository.createPost(postData);
   }
 }

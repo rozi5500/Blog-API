@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Post } from '../entities/post.entity';
+import { Post } from '../entities';
 import { Repository } from 'typeorm';
+import { PostCreateDto } from '../modules/posts/dto/post-create.dto';
 
 @Injectable()
 export class PostsRepository {
@@ -13,8 +14,8 @@ export class PostsRepository {
     return this.postsRepository.find();
   }
 
-  // TODO Type for postData
-  async createPost(postData: object): Promise<Post> {
-    return this.postsRepository.save(postData);
+  async createPost(postData: PostCreateDto): Promise<Post> {
+    const post = this.postsRepository.create(postData);
+    return this.postsRepository.save(post);
   }
 }
