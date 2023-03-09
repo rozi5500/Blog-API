@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Post } from './post.entity';
 import { Comment } from './comment.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -25,10 +26,11 @@ export class User {
   @Column()
   country: string;
 
-  @Column()
+  @Column({ nullable: true })
   photo: string;
 
   @Column()
+  @Exclude({ toPlainOnly: true })
   password: string;
 
   @OneToMany(() => Post, (post) => post.user)
