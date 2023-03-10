@@ -21,7 +21,10 @@ export class PostsRepository {
   }
 
   async findOnePost(id: string): Promise<Post> {
-    return this.postsRepository.findOne({ where: { id } });
+    return this.postsRepository.findOne({
+      where: { id },
+      relations: ['comments'],
+    });
   }
 
   async updatePostById(postBody: UpdatePostDto, id: string): Promise<Post> {

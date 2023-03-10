@@ -20,12 +20,7 @@ export class UserRepository {
     });
   }
 
-  async createUser(userBody: CreateUserDto): Promise<UserResponse> {
-    const user = await this.userRepository.create(userBody);
-    return this.userRepository.save(user);
-  }
-
-  async updateUserById(userBody: UpdateUserDto, id: string): Promise<any> {
+  async findOneById(id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { id },
     });
@@ -34,7 +29,18 @@ export class UserRepository {
       throw new NotFoundException(UserErrorMessagesEnum.USER_NOT_FOUND);
     }
 
-    return this.userRepository.save({ id, ...userBody });
+    return user;
+  }
+
+  async createUser(userBody: CreateUserDto): Promise<UserResponse> {
+    const user = await this.userRepository.create(userBody);
+    return this.userRepository.save(user);
+  }
+
+  async updateUserById(userBody: UpdateUserDto, id: string): Promise<User> {
+    await this.userRepository.save({ id, ...userBody });
+
+    return this.findOneById(id);
   }
 
   async removeUserById(id: string): Promise<void> {
