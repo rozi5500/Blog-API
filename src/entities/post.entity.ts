@@ -19,7 +19,13 @@ export class Post {
   @Column()
   title: string;
 
-  @OneToMany(() => Comment, (comment) => comment.post)
+  @Column({ nullable: true })
+  description: string;
+
+  @OneToMany(() => Comment, (comment) => comment.post, {
+    onDelete: 'CASCADE',
+    cascade: true,
+  })
   comments: Comment[];
 
   @ManyToOne(() => User, (user) => user.posts)

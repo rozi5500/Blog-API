@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { UserResponse } from '../modules/user/dto/user.response';
 import { CreateUserDto } from '../modules/user/dto/create-user.dto';
 import { UpdateUserDto } from '../modules/user/dto/update-user.dto';
-import { ErrorMessagesEnum } from '../common/enums/error-messages.enum';
+import { UserErrorMessagesEnum } from '../common/enums/error-messages.enum';
 
 @Injectable()
 export class UserRepository {
@@ -30,7 +30,9 @@ export class UserRepository {
       where: { id },
     });
 
-    if (!user) throw new NotFoundException(ErrorMessagesEnum.USER_NOT_FOUND);
+    if (!user) {
+      throw new NotFoundException(UserErrorMessagesEnum.USER_NOT_FOUND);
+    }
 
     return this.userRepository.save({ id, ...userBody });
   }

@@ -30,7 +30,7 @@ export class UserController {
     return this.userService.createUser(userBody);
   }
 
-  @Patch('/:id')
+  @Patch(':id')
   async updateUser(
     @Body() userBody: UpdateUserDto,
     @Param('id') id: string,
