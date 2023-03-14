@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities';
 import { Repository } from 'typeorm';
-import { UserResponse } from '../modules/user/dto/user.response';
-import { CreateUserDto } from '../modules/user/dto/create-user.dto';
-import { UpdateUserDto } from '../modules/user/dto/update-user.dto';
+import { UserResponse } from '../modules/users/dto/user.response';
+import { CreateUserDto } from '../modules/users/dto/create-user.dto';
+import { UpdateUserDto } from '../modules/users/dto/update-user.dto';
 import { UserErrorMessagesEnum } from '../common/enums/error-messages.enum';
 
 @Injectable()
