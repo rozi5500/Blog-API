@@ -6,19 +6,23 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { Post as PostEntity } from '../../entities/post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { FilterWithPaginationDto } from '../../common/dto/pagination.dto';
 
 @Controller('posts')
 export class PostsController {
   constructor(private postsService: PostsService) {}
 
   @Get()
-  async getAllPosts(): Promise<PostEntity[]> {
-    return this.postsService.getPosts();
+  async getAllPosts(
+    @Query() queryParams: FilterWithPaginationDto,
+  ): Promise<PostEntity[]> {
+    return this.postsService.getPosts(queryParams);
   }
 
   @Post('create')

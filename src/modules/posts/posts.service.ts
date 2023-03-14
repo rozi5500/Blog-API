@@ -4,13 +4,14 @@ import { Post } from '../../entities';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostErrorMessagesEnum } from '../../common/enums/error-messages.enum';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { FilterWithPaginationDto } from '../../common/dto/pagination.dto';
 
 @Injectable()
 export class PostsService {
   constructor(private postsRepository: PostsRepository) {}
 
-  async getPosts(): Promise<Post[]> {
-    return this.postsRepository.findAllPosts();
+  async getPosts(queryParams: FilterWithPaginationDto): Promise<Post[]> {
+    return this.postsRepository.findAllPosts(queryParams);
   }
 
   async getOnePostById(id: string): Promise<Post> {

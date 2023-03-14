@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from '../entities';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { CreatePostDto } from '../modules/posts/dto/create-post.dto';
 import { UpdatePostDto } from '../modules/posts/dto/update-post.dto';
+import { FilterWithPaginationDto } from '../common/dto/pagination.dto';
 
 @Injectable()
 export class PostsRepository {
@@ -11,8 +12,15 @@ export class PostsRepository {
     @InjectRepository(Post) private postsRepository: Repository<Post>,
   ) {}
 
-  async findAllPosts(): Promise<Post[]> {
-    return this.postsRepository.find({ relations: ['comments'] });
+  async findAllPosts(queryParams: FilterWithPaginationDto): Promise<Post[]> {
+    const { page = 1, offset = 15, filter } = queryParams;
+
+    return this.postsRepository.find({
+      relations: ['comments'],
+      take: offset,
+      skip: page - 1,
+      where: { title: ILike(filter) },
+    });
   }
 
   async createPost(postData: CreatePostDto): Promise<Post> {
