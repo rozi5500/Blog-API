@@ -3,6 +3,7 @@ import { UsersService } from '../users/users.service';
 import { UserFieldsEnum } from '../../common/enums/user_fields.enum';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../../entities';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -13,8 +14,9 @@ export class AuthService {
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(email, UserFieldsEnum.EMAIL);
+    const arePasswordsSame = await bcrypt.compare(pass, user.password);
 
-    if (user && user.password === pass) {
+    if (user && arePasswordsSame) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...userData } = user;
       return userData;
