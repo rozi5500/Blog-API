@@ -3,6 +3,7 @@ import { UserRepository } from '../../repositories/user.repository';
 import { UserResponse } from './dto/user.response';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from '../../entities';
 
 @Injectable()
 export class UsersService {
@@ -17,12 +18,16 @@ export class UsersService {
   }
 
   async updateUserById(userBody: UpdateUserDto, id: string): Promise<any> {
-    await this.userRepository.findOneById(id);
+    await this.findOne(id);
 
     return this.userRepository.updateUserById(userBody, id);
   }
 
   async deleteUserById(id: string): Promise<void> {
     return this.userRepository.removeUserById(id);
+  }
+
+  async findOne(param: string | number, field = 'id'): Promise<User> {
+    return this.userRepository.findOne(param, field);
   }
 }

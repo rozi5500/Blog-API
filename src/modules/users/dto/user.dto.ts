@@ -15,6 +15,7 @@ export class UserDto {
   @IsEmail()
   email: string;
 
+  @IsOptional()
   @IsString()
   userName: string;
 

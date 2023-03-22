@@ -20,9 +20,9 @@ export class UserRepository {
     });
   }
 
-  async findOneById(id: string): Promise<User> {
+  async findOne(param: string | number, field = 'id'): Promise<User> {
     const user = await this.userRepository.findOne({
-      where: { id },
+      where: { [field]: param },
     });
 
     if (!user) {
@@ -40,7 +40,7 @@ export class UserRepository {
   async updateUserById(userBody: UpdateUserDto, id: string): Promise<User> {
     await this.userRepository.save({ id, ...userBody });
 
-    return this.findOneById(id);
+    return this.findOne(id);
   }
 
   async removeUserById(id: string): Promise<void> {
