@@ -19,6 +19,10 @@ export class UserDto {
   @IsString()
   userName: string;
 
+  @IsOptional()
+  @IsString()
+  refresh_token: string;
+
   @IsEnum(GendersEnum)
   gender: string;
 

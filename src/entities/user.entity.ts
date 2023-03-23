@@ -20,6 +20,9 @@ export class User {
   @Column({ nullable: true })
   userName: string;
 
+  @Column({ nullable: true })
+  refresh_token: string;
+
   @Column()
   gender: string;
 
