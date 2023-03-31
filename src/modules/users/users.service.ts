@@ -1,10 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserRepository } from '../../repositories/user.repository';
 import { UserResponse } from './dto/user.response';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from '../../entities';
 import * as bcrypt from 'bcrypt';
+import { UserFieldsEnum } from '../../common/enums/user_fields.enum';
+import { UserErrorMessagesEnum } from '../../common/enums/error-messages.enum';
+import { ChangeUserRoleDto } from './dto/change-role.dto';
 
 @Injectable()
 export class UsersService {
@@ -15,11 +22,20 @@ export class UsersService {
   }
 
   async createUser(userBody: CreateUserDto): Promise<UserResponse> {
-    const user = await this.hashPassword(userBody);
-    return this.userRepository.createUser(user);
+    const user = await this.userRepository.findOne(
+      userBody.email,
+      UserFieldsEnum.EMAIL,
+    );
+
+    if (userBody.email === user?.email) {
+      throw new BadRequestException('This email already exists');
+    }
+
+    const userWithHashedPass = await this.hashPassword(userBody);
+    return this.userRepository.createUser(userWithHashedPass);
   }
 
-  async updateUserById(userBody: UpdateUserDto, id: string): Promise<any> {
+  async updateUserById(userBody: UpdateUserDto, id: string): Promise<User> {
     await this.findOne(id);
 
     return this.userRepository.updateUserById(userBody, id);
@@ -30,7 +46,13 @@ export class UsersService {
   }
 
   async findOne(param: string | number, field = 'id'): Promise<User> {
-    return this.userRepository.findOne(param, field);
+    const user = await this.userRepository.findOne(param, field);
+
+    if (!user) {
+      throw new NotFoundException(UserErrorMessagesEnum.USER_NOT_FOUND);
+    }
+
+    return user;
   }
 
   async hashPassword(user: Partial<User>): Promise<any> {
@@ -38,5 +60,9 @@ export class UsersService {
     const hashedPass = await bcrypt.hash(user.password, salt);
 
     return { ...user, password: hashedPass };
+  }
+
+  async changeUserRole(body: ChangeUserRoleDto): Promise<User> {
+    return this.userRepository.updateUserById(body, body.id);
   }
 }

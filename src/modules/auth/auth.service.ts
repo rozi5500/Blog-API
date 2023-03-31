@@ -41,7 +41,7 @@ export class AuthService {
   }
 
   async login(user: User): Promise<AuthLoginResponse> {
-    const payload = { email: user.email, sub: user.id };
+    const payload = { email: user.email, sub: user.id, role: user.role };
 
     const tokens = this.generateTokens(payload, {
       expiresIn: process.env.REFRESH_EXPIRES_IN,
@@ -58,7 +58,7 @@ export class AuthService {
 
   async refreshTokens(userId: string): Promise<AuthLoginResponse> {
     const user = await this.usersService.findOne(userId);
-    const payload = { email: user.email, sub: user.id };
+    const payload = { email: user.email, sub: user.id, role: user.role };
 
     const tokens = this.generateTokens(payload, {
       expiresIn: process.env.REFRESH_EXPIRES_IN,

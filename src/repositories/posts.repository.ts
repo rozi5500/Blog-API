@@ -15,10 +15,18 @@ export class PostsRepository {
   async findAllPosts(queryParams: FilterWithPaginationDto): Promise<Post[]> {
     const { page = 1, offset = 15, filter } = queryParams;
 
-    return this.postsRepository.find({
+    const options = {
       relations: ['comments'],
       take: offset,
       skip: page - 1,
+    };
+
+    if (!filter) {
+      return this.postsRepository.find(options);
+    }
+
+    return this.postsRepository.find({
+      ...options,
       where: { title: ILike(filter) },
     });
   }

@@ -35,4 +35,8 @@ export class UserDto {
 
   @IsString()
   password: string;
+
+  @IsString()
+  @IsOptional()
+  role: string;
 }

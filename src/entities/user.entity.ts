@@ -23,6 +23,9 @@ export class User {
   @Column({ nullable: true })
   refresh_token: string;
 
+  @Column({ default: 'User' })
+  role: string;
+
   @Column()
   gender: string;
 
