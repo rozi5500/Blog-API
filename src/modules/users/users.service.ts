@@ -9,9 +9,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from '../../entities';
 import * as bcrypt from 'bcrypt';
-import { UserFieldsEnum } from '../../common/enums/user_fields.enum';
-import { UserErrorMessagesEnum } from '../../common/enums/error-messages.enum';
+import { UserFieldsEnum, UserErrorMessagesEnum } from '../../common/enums';
 import { ChangeUserRoleDto } from './dto/change-role.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class UsersService {
@@ -62,7 +62,38 @@ export class UsersService {
     return { ...user, password: hashedPass };
   }
 
+  comparePasswords(password, encryptedPass): undefined | Error {
+    const ArePasswordsSame = bcrypt.compareSync(password, encryptedPass);
+
+    if (!ArePasswordsSame) {
+      throw new BadRequestException(UserErrorMessagesEnum.INVALID_PASSWORD);
+    }
+
+    return;
+  }
+
   async changeUserRole(body: ChangeUserRoleDto): Promise<User> {
     return this.userRepository.updateUserById(body, body.id);
+  }
+
+  async changePassword(
+    passwords: ChangePasswordDto,
+    id: string,
+  ): Promise<void> {
+    const user = await this.findOne(id);
+    const newPassSame = bcrypt.compareSync(
+      passwords.newPassword,
+      user.password,
+    );
+
+    this.comparePasswords(passwords.password, user.password);
+    if (newPassSame) {
+      throw new BadRequestException(UserErrorMessagesEnum.SAME_PASSWORDS);
+    }
+
+    const { password } = await this.hashPassword({
+      password: passwords.newPassword,
+    });
+    await this.userRepository.updateUserById({ password }, id);
   }
 }

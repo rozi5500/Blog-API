@@ -111,7 +111,7 @@ export class AuthService {
         decodedToken.email,
         UserFieldsEnum.EMAIL,
       );
-      const ArePasswordsSame = await bcrypt.compare(
+      const newPassSame = await bcrypt.compare(
         userData.password,
         user.password,
       );
@@ -119,7 +119,7 @@ export class AuthService {
       if (user.authToken !== token) {
         throw new UnauthorizedException(UserErrorMessagesEnum.INVALID_TOKEN);
       }
-      if (ArePasswordsSame) {
+      if (newPassSame) {
         throw new BadRequestException(UserErrorMessagesEnum.SAME_PASSWORDS);
       }
 

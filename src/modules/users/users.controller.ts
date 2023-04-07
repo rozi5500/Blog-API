@@ -15,11 +15,12 @@ import { UserResponse } from './dto/user.response';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from '../../common/decorators/roles.decorator';
-import { RolesEnum } from '../../common/enums/roles.enum';
+import { RolesEnum } from '../../common/enums';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { ChangeUserRoleDto } from './dto/change-role.dto';
 import { User } from '../../entities';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Controller('users')
 export class UsersController {
@@ -58,5 +59,13 @@ export class UsersController {
   @Patch('update/role')
   async changeUserRole(@Body() body: ChangeUserRoleDto): Promise<User> {
     return this.userService.changeUserRole(body);
+  }
+
+  @Post('change/password/:id')
+  async changeUserPassword(
+    @Body() passwords: ChangePasswordDto,
+    @Param('id') id: string,
+  ): Promise<void> {
+    return this.userService.changePassword(passwords, id);
   }
 }
