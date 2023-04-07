@@ -1,6 +1,5 @@
 import { IsEmail, IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
-import { GendersEnum } from '../../../common/enums/genders.enum';
-import { CountriesEnum } from '../../../common/enums/countries.enum';
+import { CountriesEnum, GendersEnum } from '../../../common/enums';
 
 export class UserDto {
   @IsUUID()
@@ -39,4 +38,8 @@ export class UserDto {
   @IsString()
   @IsOptional()
   role: string;
+
+  @IsString()
+  @IsOptional()
+  authToken: string;
 }

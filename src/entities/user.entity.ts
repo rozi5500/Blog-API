@@ -39,6 +39,9 @@ export class User {
   @Exclude({ toPlainOnly: true })
   password: string;
 
+  @Column({ nullable: true })
+  authToken: string;
+
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 

@@ -9,16 +9,19 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
+import { MailModule } from '../mail/mail.module';
+import { MailService } from '../mail/mail.service';
 
 @Module({
   imports: [
-    UsersModule,
-    RepositoriesModule,
-    PassportModule,
     JwtModule.register({
       secret: process.env.JWT_ACCESS_SECRET,
       signOptions: { expiresIn: process.env.ACCESS_EXPIRES_IN },
     }),
+    UsersModule,
+    RepositoriesModule,
+    PassportModule,
+    MailModule,
   ],
   providers: [
     AuthService,
@@ -26,6 +29,7 @@ import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
     LocalStrategy,
     JwtStrategy,
     JwtRefreshStrategy,
+    MailService,
   ],
   controllers: [AuthController],
 })
