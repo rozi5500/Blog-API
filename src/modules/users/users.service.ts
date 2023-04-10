@@ -5,16 +5,18 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { UserRepository } from '../repositories/user.repository';
-import { UserResponse } from './dto/user.response';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UserRepository } from '../repositories';
 import { User } from '../../entities';
 import * as bcrypt from 'bcrypt';
 import { UserFieldsEnum, UserErrorMessagesEnum } from '../../common/enums';
-import { ChangeUserRoleDto } from './dto/change-role.dto';
-import { ChangePasswordDto } from './dto/change-password.dto';
-import { AuthService } from '../auth/auth.service';
+import {
+  ChangePasswordDto,
+  ChangeUserRoleDto,
+  CreateUserDto,
+  UpdateUserDto,
+  UserResponse,
+} from './dto';
+import { AuthService } from '../auth';
 
 @Injectable()
 export class UsersService {

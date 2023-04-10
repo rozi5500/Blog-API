@@ -10,11 +10,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
-import { Post as PostEntity } from '../../entities/post.entity';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { FilterWithPaginationDto } from '../../common/dto/pagination.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Post as PostEntity } from '../../entities';
+import { CreatePostDto, UpdatePostDto } from './dto';
+import { JwtAuthGuard } from '../auth';
+import { FilterWithPaginationDto } from '../../common/dto';
 
 @Controller('posts')
 export class PostsController {

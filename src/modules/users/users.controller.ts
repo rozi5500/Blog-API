@@ -11,16 +11,17 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UserResponse } from './dto/user.response';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { Roles } from '../../common/decorators/roles.decorator';
+import { Roles } from '../../common/decorators';
 import { RolesEnum } from '../../common/enums';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { ChangeUserRoleDto } from './dto/change-role.dto';
+import { JwtAuthGuard, RolesGuard } from '../auth';
+import {
+  ChangePasswordDto,
+  ChangeUserRoleDto,
+  CreateUserDto,
+  UpdateUserDto,
+  UserResponse,
+} from './dto';
 import { User } from '../../entities';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Controller('users')
 export class UsersController {

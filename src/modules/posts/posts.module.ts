@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
-import { PostsController } from './posts.controller';
-import { PostsService } from './posts.service';
-import { RepositoriesModule } from '../repositories/repositories.module';
+import { PostsService, PostsController } from '../posts';
+import { RepositoriesModule } from '../repositories';
 import { JwtService } from '@nestjs/jwt';
 
 @Module({

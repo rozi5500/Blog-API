@@ -5,8 +5,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { RolesEnum } from '../../../common/enums/roles.enum';
-import { ROLES_KEY } from '../../../common/decorators/roles.decorator';
+import { RolesEnum } from '../../../common/enums';
+import { ROLES_KEY } from '../../../common/decorators';
 import { JwtService } from '@nestjs/jwt';
 
 export type userType = {

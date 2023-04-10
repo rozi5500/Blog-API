@@ -1,10 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PostsRepository } from '../repositories/posts.repository';
+import { PostsRepository } from '../repositories';
 import { Post } from '../../entities';
-import { CreatePostDto } from './dto/create-post.dto';
+import { CreatePostDto, UpdatePostDto } from './dto';
 import { PostErrorMessagesEnum } from '../../common/enums';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { FilterWithPaginationDto } from '../../common/dto/pagination.dto';
+import { FilterWithPaginationDto } from '../../common/dto';
 
 @Injectable()
 export class PostsService {

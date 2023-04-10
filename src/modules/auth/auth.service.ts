@@ -9,13 +9,12 @@ import {
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../../entities';
-import { AuthLoginResponse } from '../../common/types/auth-login-response.type';
+import { AuthLoginResponse } from '../../common/types';
 import { UserErrorMessagesEnum, UserFieldsEnum } from '../../common/enums';
-import { ForgotPasswordDto } from './dto/forgot-password.dto';
-import { RestorePasswordDto } from './dto/restore-password.dto';
-import { MailService } from '../mail/mail.service';
 import * as process from 'process';
 import * as bcrypt from 'bcrypt';
+import { ForgotPasswordDto, RestorePasswordDto } from './dto';
+import { MailService } from '../mail';
 
 @Injectable()
 export class AuthService {
