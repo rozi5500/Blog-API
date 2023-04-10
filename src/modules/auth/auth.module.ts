@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
 import { UsersService } from '../users/users.service';
-import { RepositoriesModule } from '../../repositories/repositories.module';
+import { RepositoriesModule } from '../repositories/repositories.module';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local.strategy';
 import { AuthController } from './auth.controller';
@@ -18,7 +18,7 @@ import { MailService } from '../mail/mail.service';
       secret: process.env.JWT_ACCESS_SECRET,
       signOptions: { expiresIn: process.env.ACCESS_EXPIRES_IN },
     }),
-    UsersModule,
+    forwardRef(() => UsersModule),
     RepositoriesModule,
     PassportModule,
     MailModule,

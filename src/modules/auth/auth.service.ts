@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -18,6 +20,7 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
   constructor(
+    @Inject(forwardRef(() => UsersService))
     private usersService: UsersService,
     private jwtService: JwtService,
     private mailService: MailService,
@@ -123,16 +126,29 @@ export class AuthService {
         throw new BadRequestException(UserErrorMessagesEnum.SAME_PASSWORDS);
       }
 
-      const { password } = await this.usersService.hashPassword({
-        password: userData.password,
-      });
+      const hashedPass = await this.hashPassword(userData.password);
 
       await this.usersService.updateUserById(
-        { password, authToken: null },
+        { password: hashedPass, authToken: null },
         decodedToken.sub,
       );
     } catch (e) {
       throw new UnauthorizedException(e.message);
     }
+  }
+
+  async hashPassword(password: string): Promise<string> {
+    const salt = 10;
+    return bcrypt.hash(password, salt);
+  }
+
+  passwordsMatch(password, encryptedPass): undefined | Error {
+    const ArePasswordsSame = bcrypt.compareSync(password, encryptedPass);
+
+    if (!ArePasswordsSame) {
+      throw new BadRequestException(UserErrorMessagesEnum.INVALID_PASSWORD);
+    }
+
+    return;
   }
 }

@@ -1,9 +1,11 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { UserRepository } from '../../repositories/user.repository';
+import { UserRepository } from '../repositories/user.repository';
 import { UserResponse } from './dto/user.response';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -12,10 +14,15 @@ import * as bcrypt from 'bcrypt';
 import { UserFieldsEnum, UserErrorMessagesEnum } from '../../common/enums';
 import { ChangeUserRoleDto } from './dto/change-role.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(
+    private userRepository: UserRepository,
+    @Inject(forwardRef(() => AuthService))
+    private authService: AuthService,
+  ) {}
 
   async findAll(): Promise<UserResponse[]> {
     return this.userRepository.findAll();
@@ -31,8 +38,11 @@ export class UsersService {
       throw new BadRequestException('This email already exists');
     }
 
-    const userWithHashedPass = await this.hashPassword(userBody);
-    return this.userRepository.createUser(userWithHashedPass);
+    const hashedPass = await this.authService.hashPassword(userBody.password);
+    return this.userRepository.createUser({
+      ...userBody,
+      password: hashedPass,
+    });
   }
 
   async updateUserById(userBody: UpdateUserDto, id: string): Promise<User> {
@@ -55,23 +65,6 @@ export class UsersService {
     return user;
   }
 
-  async hashPassword(user: Partial<User>): Promise<any> {
-    const salt = 10;
-    const hashedPass = await bcrypt.hash(user.password, salt);
-
-    return { ...user, password: hashedPass };
-  }
-
-  comparePasswords(password, encryptedPass): undefined | Error {
-    const ArePasswordsSame = bcrypt.compareSync(password, encryptedPass);
-
-    if (!ArePasswordsSame) {
-      throw new BadRequestException(UserErrorMessagesEnum.INVALID_PASSWORD);
-    }
-
-    return;
-  }
-
   async changeUserRole(body: ChangeUserRoleDto): Promise<User> {
     return this.userRepository.updateUserById(body, body.id);
   }
@@ -86,14 +79,14 @@ export class UsersService {
       user.password,
     );
 
-    this.comparePasswords(passwords.password, user.password);
+    this.authService.passwordsMatch(passwords.password, user.password);
     if (newPassSame) {
       throw new BadRequestException(UserErrorMessagesEnum.SAME_PASSWORDS);
     }
 
-    const { password } = await this.hashPassword({
-      password: passwords.newPassword,
-    });
-    await this.userRepository.updateUserById({ password }, id);
+    const hashedPass = await this.authService.hashPassword(
+      passwords.newPassword,
+    );
+    await this.userRepository.updateUserById({ password: hashedPass }, id);
   }
 }

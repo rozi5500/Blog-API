@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Post } from '../entities';
+import { Post } from '../../entities';
 import { ILike, Repository } from 'typeorm';
-import { CreatePostDto } from '../modules/posts/dto/create-post.dto';
-import { UpdatePostDto } from '../modules/posts/dto/update-post.dto';
-import { FilterWithPaginationDto } from '../common/dto/pagination.dto';
+import { CreatePostDto } from '../posts/dto/create-post.dto';
+import { UpdatePostDto } from '../posts/dto/update-post.dto';
+import { FilterWithPaginationDto } from '../../common/dto/pagination.dto';
 
 @Injectable()
 export class PostsRepository {
