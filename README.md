@@ -19,7 +19,6 @@ A RESTful API for a blog application built with NestJS. The API allows for manag
 ## Features
 
 - CRUD operations for managing blog posts
-- CRUD operations for managing comments on blog posts
 - Authentication and authorization using JWT tokens
 - User management including registration, login, and password reset
 - Role-based access control for different types of users
@@ -60,12 +59,25 @@ The following endpoints are available in the API:
 
 ### Authentication
 
-- `POST /auth/login`: Log in an existing user and get an access token
-- `POST /auth/forgot-password`: Send an email to reset the user's password
-- `POST /auth/reset-password`: Reset the user's password using a reset token
+- `POST /auth/login`: Log in an existing user and get an access and refresh tokens
+- `GET /auth/profile`: Get the user's profile (requires JWT authentication)
+- `POST /auth/password/forgot`: Send an email to reset the user's password
+- `POST /auth/password/restore`: Reset the user's password using a reset token
+- `POST /auth/refresh`: Refresh the access token using the refresh token
 
 ### Users
 
-- `GET /users`: Get a list of all users (admin only)
-- `GET /users/:id`: Get a single user by ID (admin only)
-- `PATCH /users/:id`
+- `GET /users`: Get a list of all users
+- `GET /users/:id`: Get a single user by ID
+- `POST /users`: Create a new user
+- `PATCH /users/:id`: Update a user by ID (authenticated)
+- `DELETE /users/:id`: Delete a user by ID (admin only)
+- `PATCH /users/update/role`: Change a user's role (admin only)
+- `POST /users/change/password/:id`: Change a user's password
+
+### Posts
+
+- `GET /posts`: Get a list of all posts
+- `POST /posts/create`: Create a new post (authenticated)
+- `PATCH /posts/:id`: Update a post by ID (authenticated)
+- `DELETE /posts/:id`: Delete a post by ID (authenticated)

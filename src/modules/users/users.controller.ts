@@ -25,18 +25,24 @@ import { User } from '../../entities';
 
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService) {}
+  constructor(private usersService: UsersService) {}
 
   @Get()
   @UseInterceptors(ClassSerializerInterceptor)
   async findAllUsers(): Promise<UserResponse[]> {
-    return this.userService.findAll();
+    return this.usersService.findAll();
+  }
+
+  @Get(':id')
+  @UseInterceptors(ClassSerializerInterceptor)
+  async getUserById(@Param('id') id: string): Promise<UserResponse> {
+    return this.usersService.findOne(id);
   }
 
   @Post()
   @UseInterceptors(ClassSerializerInterceptor)
   async createUser(@Body() userBody: CreateUserDto): Promise<UserResponse> {
-    return this.userService.createUser(userBody);
+    return this.usersService.createUser(userBody);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -45,21 +51,21 @@ export class UsersController {
     @Body() userBody: UpdateUserDto,
     @Param('id') id: string,
   ): Promise<User> {
-    return this.userService.updateUserById(userBody, id);
+    return this.usersService.updateUserById(userBody, id);
   }
 
   @Roles(RolesEnum.ADMIN)
   @UseGuards(RolesGuard)
   @Delete(':id')
   async deleteUser(@Param('id') id: string): Promise<void> {
-    return this.userService.deleteUserById(id);
+    return this.usersService.deleteUserById(id);
   }
 
   @Roles(RolesEnum.ADMIN)
   @UseGuards(RolesGuard)
   @Patch('update/role')
   async changeUserRole(@Body() body: ChangeUserRoleDto): Promise<User> {
-    return this.userService.changeUserRole(body);
+    return this.usersService.changeUserRole(body);
   }
 
   @Post('change/password/:id')
@@ -67,6 +73,6 @@ export class UsersController {
     @Body() passwords: ChangePasswordDto,
     @Param('id') id: string,
   ): Promise<void> {
-    return this.userService.changePassword(passwords, id);
+    return this.usersService.changePassword(passwords, id);
   }
 }
